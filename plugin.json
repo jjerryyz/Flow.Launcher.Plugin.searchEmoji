@@ -1,0 +1,12 @@
+{
+  "ID": "18bd8e9e-04d1-422a-be05-ff4ab0dc0ad1",
+  "ActionKeyword": "ej",
+  "Name": "Search Emoji😃",
+  "Description": "Search for emoji's and copy them to your clipboard",
+  "Author": "Jerry",
+  "Version": "0.0.1",
+  "Language": "JavaScript",
+  "ExecuteFileName": "./dist/main.js",
+  "Website": "https://github.com/Joehoel/flow-launcher-plugin-template-node",
+  "IcoPath": "./assets/app.png"
+}
