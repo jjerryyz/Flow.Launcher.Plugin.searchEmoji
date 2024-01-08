@@ -1,33 +1,35 @@
-import open from "open";
-import { Flow } from "./lib/flow";
-import { z } from "zod";
-import logger from "./lib/logger";
 import emojis from './lib/emoji.json';
+import { Flow } from "./lib/flow";
+import logger from "./lib/logger";
+import { execSync } from "child_process";
 
 // The events are the custom events that you define in the flow.on() method.
 const events = ["search"] as const;
 type Events = (typeof events)[number];
 
-const flow = new Flow<Events>("assets/npm.png");
+const flow = new Flow<Events>();
 
 
-flow.on("query", (params) => {
+flow.on("query", (params = []) => {
+
+	const [query] = params as string[];
 
 	let results: typeof emojis = []
 
-	try {
-		let [query] = z.array(z.string()).parse(params);
 
-		if (query) {
-			results = emojis.filter(emoji => {
-				if (emoji.aliases.some(alias => alias.includes(query))) {
-					return true
-				}
-				if (emoji.tags.some(alias => alias.includes(query))) {
-					return true;
-				}
-			})
-		}
+	if (!query) {
+		return flow.showInputHint();
+	}
+
+	try {
+		results = emojis.filter(emoji => {
+			if (emoji.aliases.some(alias => alias.includes(query))) {
+				return true
+			}
+			if (emoji.tags.some(alias => alias.includes(query))) {
+				return true;
+			}
+		})
 	} catch (error) {
 	}
 
@@ -58,7 +60,6 @@ flow.on("search", (params) => {
 	const [emoji] = params
 	if (emoji) {
 		//  set system clipboard
-		const { execSync } = require("child_process");
 		execSync(`powershell -command "Set-Clipboard -Value \"${emoji}\""`);
 	}
 });

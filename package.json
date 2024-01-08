@@ -23,8 +23,6 @@
 		"typescript": "^4.9.4"
 	},
 	"dependencies": {
-		"open": "^8.4.0",
-		"winston": "^3.8.2",
-		"zod": "^3.20.6"
+		"winston": "^3.8.2"
 	}
 }

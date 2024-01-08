@@ -4,7 +4,6 @@ import { cwd } from "process";
 import { Logger } from "winston";
 import { PLUGIN_MANIFEST } from "./constants";
 import logger from "./logger";
-import fs from 'fs';
 
 type JSONRPCMethods =
   | "Flow.Launcher.ChangeQuery"
@@ -30,9 +29,9 @@ type Methods<T> = JSONRPCMethods | T;
 
 type MethodsObj<T> = {
   [key in Methods<T> extends string
-    ? Methods<T>
-    : // eslint-disable-next-line @typescript-eslint/ban-types
-      JSONRPCMethods | (string & {})]: () => void;
+  ? Methods<T>
+  : // eslint-disable-next-line @typescript-eslint/ban-types
+  JSONRPCMethods | (string & {})]: () => void;
 };
 
 type ParametersAllowedTypes =
@@ -75,18 +74,10 @@ export interface JSONRPCResponse<TMethods> {
   context?: Parameters;
 }
 
-interface IFlow<TMethods, TSettings> {
-  settings: TSettings;
-  on: (method: Method<TMethods>, callbackFn: () => void) => void;
-  // showResult: (result: JSONRPCResponse<TMethods>[]) => void;
-  run: () => void;
-}
 
 export class Flow<TMethods, TSettings = Record<string, string>>
-  implements IFlow<TMethods, TSettings>
 {
   private methods = {} as MethodsObj<TMethods>;
-  private defaultIconPath: string | undefined;
   private readonly data: Data<TMethods, TSettings> = JSON.parse(process.argv[2]);
 
   public log: Logger;
@@ -101,8 +92,7 @@ export class Flow<TMethods, TSettings = Record<string, string>>
   /**
    * Creates an instance of Flow.
    */
-  constructor(defaultIconPath?: string) {
-    this.defaultIconPath = defaultIconPath;
+  constructor() {
     this.run = this.run.bind(this);
     this.on = this.on.bind(this);
 
@@ -126,6 +116,22 @@ export class Flow<TMethods, TSettings = Record<string, string>>
    */
   public on(method: keyof MethodsObj<TMethods>, callbackFn: (params: Parameters) => void) {
     this.methods[method] = callbackFn.bind(this, this.data.parameters);
+  }
+
+  showInputHint() {
+    const hint = {
+      Title: 'eg. face => 🙂',
+      Subtitle: '',
+      JsonRPCAction: {
+        method: 'search',
+        parameters: [],
+        dontHideAfterAction: false,
+      },
+      ContextData: [],
+      			IcoPath: `assets\\app.png`,
+      Score: 0,
+    };
+    return console.log(JSON.stringify({ result: [hint] }));
   }
 
   /**
