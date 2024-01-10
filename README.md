@@ -3,7 +3,7 @@
 
 ## TodoList
 
-- [] Search by Category
-- [] Publish
-- [] Integrate with Sqlite?
-
+- [ ] Search by Category
+- [ ] Publish
+- [ ] Integrate with Sqlite?
+- [x] Some icon link broken

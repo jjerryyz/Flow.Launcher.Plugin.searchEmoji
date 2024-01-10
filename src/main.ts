@@ -23,11 +23,11 @@ flow.on("query", (params = []) => {
 
 	try {
 		results = emojis.filter(emoji => {
+			if (emoji.description.includes(query)) {
+				return true;
+			}
 			if (emoji.aliases.some(alias => alias.includes(query))) {
 				return true
-			}
-			if (emoji.tags.some(alias => alias.includes(query))) {
-				return true;
 			}
 		})
 	} catch (error) {
@@ -35,8 +35,11 @@ flow.on("query", (params = []) => {
 
 	const result = results.map(r => {
 		// transform emoji to something like 
-		const flavor = 'img-apple-160';
-		const code = r.emoji.codePointAt(0)?.toString(16);
+		const flavor = 'img-google-136';
+		const { emoji, variant: _variant } = r;
+		const variant = 
+		_variant === 1 ? `-fe0e` : _variant === 2 ? '-fe0f' : '';
+		const code = emoji.codePointAt(0)?.toString(16);
 		return {
 			Title: r.description,
 			Subtitle: r.category + " " + r.tags.join(" "),
@@ -46,7 +49,7 @@ flow.on("query", (params = []) => {
 				dontHideAfterAction: false,
 			},
 			ContextData: [],
-			IcoPath: `https://emoji.aranja.com/static/emoji-data/${flavor}/${code}.png`,
+			IcoPath: `https://emoji.aranja.com/static/emoji-data/${flavor}/${code}${variant}.png`,
 			Score: 0,
 		};
 	});
