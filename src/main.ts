@@ -34,7 +34,7 @@ flow.on("query", (params = []) => {
 		const iconUrl =  `https://emoji.aranja.com/static/emoji-data/${flavor}/${code}${variant}.png`
 
 		return {
-			Title: r.description,
+			Title: r.description + " " + emoji,
 			Subtitle: r.category + " " + r.tags.join(" "),
 			JsonRPCAction: {
 				method: 'search',
