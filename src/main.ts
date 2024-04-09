@@ -23,11 +23,16 @@ flow.on("query", (params = []) => {
 
 	const result = fuze.search(query).map(({ item: r }) => {
 		// transform emoji to something like 
-		const flavor = 'img-google-136';
-		const { emoji, variant: _variant } = r;
-		const variant =
-			_variant === 1 ? `-fe0e` : _variant === 2 ? '-fe0f' : '';
+
+		// img-twitter-72
+		// img-facebook-96
+		// img-messenger-128
+		// const flavor = 'img-google-136';
+		const flavor = 'img-apple-160';
+		const { emoji, variant='' } = r;
 		const code = emoji.codePointAt(0)?.toString(16);
+		const iconUrl =  `https://emoji.aranja.com/static/emoji-data/${flavor}/${code}${variant}.png`
+
 		return {
 			Title: r.description,
 			Subtitle: r.category + " " + r.tags.join(" "),
@@ -37,7 +42,7 @@ flow.on("query", (params = []) => {
 				dontHideAfterAction: false,
 			},
 			ContextData: [],
-			IcoPath: `https://emoji.aranja.com/static/emoji-data/${flavor}/${code}${variant}.png`,
+			IcoPath: iconUrl,
 			Score: 0,
 		};
 	});
